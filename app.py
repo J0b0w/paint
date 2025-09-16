@@ -32,6 +32,11 @@ def remap_image(img, src_palette, dst_palette):
 
     return img
 
+def to_base64(img):
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
@@ -47,14 +52,18 @@ def index():
 
             result = remap_image(img2, palette2, palette1)
 
-            # renvoyer l’image en mémoire
-            buf = io.BytesIO()
-            result.save(buf, format="PNG")
-            buf.seek(0)
-            img_b64 = base64.b64encode(buf.read()).decode()
-            result_url = "data:image/png;base64," + img_b64
-            #return send_file(buf, mimetype="image/png")
-            return render_template("index.html", result_url=result_url)
+            ref1_url = to_base64(img1)
+            ref2_url = to_base64(img2)
+            result_url = to_base64(result)
+
+            return render_template(
+                "index.html", 
+                result_url=result_url,
+                ref1_url=ref1_url,
+                ref2_url=ref2_url,
+                palette1=palette1,
+                palette2=palette2
+            )
 
     return render_template("index.html")
 

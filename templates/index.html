@@ -10,7 +10,23 @@
       transform-origin: top left;
       display: block;
     }
-  </style>
+    .palette {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 10px;
+    }
+    .color-box {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-family: monospace;
+      color: white;
+      text-shadow: 1px 1px 2px black;
+    </style>
 </head>
 <body>
   <h1>Remapper les couleurs d'une image</h1>
@@ -19,9 +35,31 @@
     <p>Image 2 (à recolorer) : <input type="file" name="image2" required></p>
     <p><input type="submit" value="Envoyer"></p>
   </form>
-{% if result_url %}
-   <h2>Résultat :</h2>
-    <img src="{{ result_url }}" class="zoomed">
+{% if ref1_url and ref2_url and result_url %}
+    <h2>Image 1 (palette source)</h2>
+    <img src="{{ ref1_url }}" class="zoomed">
+    <div class="palette">
+      {% for r,g,b in palette1 %}
+        <div class="color-box" style="background: rgb({{r}},{{g}},{{b}})">
+          {{'%02X%02X%02X' % (r,g,b)}}
+        </div>
+      {% endfor %}
+    </div>
+
+    <h2>Image 2 (avant recolorisation)</h2>
+    <img src="{{ ref2_url }}" class="zommed">
+    <div class="palette">
+      {% for r,g,b in palette2 %}
+        <div class="color-box" style="background: rgb({{r}},{{g}},{{b}})">
+          {{'%02X%02X%02X' % (r,g,b)}}
+        </div>
+      {% endfor %}
+    </div>
+
+    <h2>Image résultat (zoom x10 affichage)</h2>
+    <div style="overflow:auto; border:1px solid #ccc; display:inline-block;">
+      <img src="{{ result_url }}" class="zoomed">
+    </div>
 {% endif %}
 </body>
 </html>
