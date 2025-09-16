@@ -47,6 +47,9 @@
       text-shadow: 1px 1px 2px black;
     }
     img {
+      image-rendering: pixelated;
+      width: 160px;
+      height: 160px;
       display: block;
       margin: 0 auto;
       border: 1px solid #888;
@@ -91,10 +94,8 @@
 
       <!-- Colonne 3 -->
       <div class="col">
-        <h2>Image résultat (zoom x10)</h2>
-        <div style="overflow:auto; display:inline-block;">
-          <img src="{{ result_url }}" class="zoomed">
-        </div>
+        <h2>Image résultat</h2>
+          <img src="{{ result_url }}" >
       </div>
     </div>
   {% endif %}
