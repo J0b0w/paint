@@ -3,18 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <title>Remap Couleurs</title>
-      <style>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
     .zoomed {
-      image-rendering: pixelated; /* pixel art net */
+      image-rendering: pixelated;
       transform: scale(10);
       transform-origin: top left;
       display: block;
+    }
+    .container {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .col {
+      flex: 1;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .col h2 {
+      font-size: 16px;
+      margin: 5px 0;
+      text-align: center;
     }
     .palette {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
       margin-top: 10px;
+      justify-content: center;
     }
     .color-box {
       width: 40px;
@@ -26,7 +45,13 @@
       font-family: monospace;
       color: white;
       text-shadow: 1px 1px 2px black;
-    </style>
+    }
+    img {
+      display: block;
+      margin: 0 auto;
+      border: 1px solid #888;
+    }
+  </style>
 </head>
 <body>
   <h1>Remapper les couleurs d'une image</h1>
@@ -35,32 +60,44 @@
     <p>Image 2 (à recolorer) : <input type="file" name="image2" required></p>
     <p><input type="submit" value="Envoyer"></p>
   </form>
-{% if ref1_url and ref2_url and result_url %}
-    <h2>Image 1 (palette source)</h2>
-    <img src="{{ ref1_url }}" class="zoomed">
-    <div class="palette">
-      {% for r,g,b in palette1 %}
-        <div class="color-box" style="background: rgb({{r}},{{g}},{{b}})">
-          {{'%02X%02X%02X' % (r,g,b)}}
-        </div>
-      {% endfor %}
-    </div>
 
-    <h2>Image 2 (avant recolorisation)</h2>
-    <img src="{{ ref2_url }}" class="zommed">
-    <div class="palette">
-      {% for r,g,b in palette2 %}
-        <div class="color-box" style="background: rgb({{r}},{{g}},{{b}})">
-          {{'%02X%02X%02X' % (r,g,b)}}
+  {% if ref1_url and ref2_url and result_url %}
+    <div class="container">
+      <!-- Colonne 1 -->
+      <div class="col">
+        <h2>Image 1 (palette source)</h2>
+        <img src="{{ ref1_url }}" style="max-width:200px;">
+        <div class="palette">
+          {% for r,g,b in palette1 %}
+            <div class="color-box" style="background: rgb({{r}},{{g}},{{b}})">
+              {{'%02X%02X%02X' % (r,g,b)}}
+            </div>
+          {% endfor %}
         </div>
-      {% endfor %}
-    </div>
+      </div>
 
-    <h2>Image résultat (zoom x10 affichage)</h2>
-    <div style="overflow:auto; border:1px solid #ccc; display:inline-block;">
-      <img src="{{ result_url }}" class="zoomed">
+      <!-- Colonne 2 -->
+      <div class="col">
+        <h2>Image 2 (avant recolorisation)</h2>
+        <img src="{{ ref2_url }}" style="max-width:200px;">
+        <div class="palette">
+          {% for r,g,b in palette2 %}
+            <div class="color-box" style="background: rgb({{r}},{{g}},{{b}})">
+              {{'%02X%02X%02X' % (r,g,b)}}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Colonne 3 -->
+      <div class="col">
+        <h2>Image résultat (zoom x10)</h2>
+        <div style="overflow:auto; display:inline-block;">
+          <img src="{{ result_url }}" class="zoomed">
+        </div>
+      </div>
     </div>
-{% endif %}
+  {% endif %}
 </body>
 </html>
 
